@@ -42,7 +42,6 @@
     "react": "^19.0.0",
     "react-best-gradient-color-picker": "^3.0.14",
     "react-dom": "^19.0.0",
-    "react-loader-spinner": "^6.1.6",
     "remotion": "^4.0.249",
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.6.0",

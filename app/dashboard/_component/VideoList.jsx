@@ -1,46 +1,46 @@
 import { DownloadIcon, Edit2Icon, Loader2, Trash } from "lucide-react";
+import Link from "next/link";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const VideoList = ({ initialVideoList }) => {
-  const [videolist, setVideolist] = useState(initialVideoList); // State to store the video list
-  const [loading, setLoading] = useState(null);
+const VideoList = ({ videolist }) => {
+  const [loading, setLoading] = useState(null); 
   const router = useRouter();
 
-  const handleDeletion = async (videoId) => {
+  const handleDeletion = async (videoId) => { 
     try {
-      const response = await fetch("http://localhost:3000/api/Video", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          videoId: videoId,
-        }),
-      });
-      const result = await response.json();
-      if (response.ok) {
-        console.log("Video deleted successfully");
-        setVideolist((prevVideos) =>
-          prevVideos.filter((video) => video.videoId !== videoId)
-        );
-      } else {
-        console.error(result.error || "Failed to delete video");
-      }
+        const response = await fetch('http://localhost:3000/api/Video', {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json", 
+            },
+            body: JSON.stringify({
+                videoId: videoId,
+            }),
+        });
+        const result = await response.json();
+        if (response.ok) {
+            console.log("Video deleted successfully");
+            // Optionally refresh the list here if needed
+            // e.g., call a function to refetch the video list
+        } else {
+            console.error(result.error || "Failed to delete video");
+        }
     } catch (error) {
-      console.error("Deletion error:", error);
+        console.error("Deletion error:", error);
     }
-  };
+};
+
 
   const handleNavigation = async (videoId) => {
-    setLoading(videoId);
+    setLoading(videoId); 
     await router.push(`/editor/${videoId}`);
-    setLoading(null);
+    setLoading(null); 
   };
 
   return (
     <div className="mt-5">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {videolist.map((video, index) => {
           const frame = video?.videoData?.frameList?.[0];
           return (
@@ -73,7 +73,7 @@ const VideoList = ({ initialVideoList }) => {
                   <Edit2Icon className="z-20 text-white h-6 w-6" />
                 </div>
               </div>
-
+              
               {video.status === "active" ? (
                 <div className="flex gap-5 mt-2 items-center justify-end">
                   <Edit2Icon

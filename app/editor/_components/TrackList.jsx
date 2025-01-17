@@ -67,7 +67,7 @@ const TrackList = () => {
               }}
             >
               <Image
-                src={val.image}
+                src={val.image ? val.image : "/footage.png"}
                 alt="img"
                 width={40}
                 height={40}

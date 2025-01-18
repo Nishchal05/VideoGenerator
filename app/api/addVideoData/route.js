@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 
 // Helper function to add CORS headers
 function addCorsHeaders(response) {
-  response.headers.set("Access-Control-Allow-Origin", "*");  // Allow all origins
+  response.headers.set("Access-Control-Allow-Origin", "*");  
   response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
   response.headers.set("Access-Control-Allow-Headers", "Content-Type");
   return response;
@@ -22,11 +22,11 @@ export async function POST(req) {
     }).returning(VIDEO_RAW_TABLE); 
 
     let res = NextResponse.json({ response: response });
-    return addCorsHeaders(res); // Add CORS headers
+    return addCorsHeaders(res); 
   } catch (error) {
     console.error('Error during video data insertion:', error);
     let res = NextResponse.json({ error: 'An error occurred on the server' }, { status: 500 });
-    return addCorsHeaders(res); // Add CORS headers
+    return addCorsHeaders(res); 
   }
 }
 
@@ -36,18 +36,22 @@ export async function PUT(req) {
     const { videoId, videoData } = await req.json();
 
     const response = await db.update(VIDEO_RAW_TABLE)
-      .set({ videoData: videoData })
+      .set({
+        videoData: videoData,   
+        status: 'active'       
+      })
       .where(eq(VIDEO_RAW_TABLE.videoId, videoId))
       .returning(VIDEO_RAW_TABLE);
 
     let res = NextResponse.json({ response: response });
-    return addCorsHeaders(res); // Add CORS headers
+    return addCorsHeaders(res); 
   } catch (error) {
     console.error('Error during video data update:', error);
     let res = NextResponse.json({ error: 'An error occurred while updating video data' }, { status: 500 });
-    return addCorsHeaders(res); // Add CORS headers
+    return addCorsHeaders(res); 
   }
 }
+
 
 // GET handler
 export async function GET(req) {
@@ -61,16 +65,16 @@ export async function GET(req) {
       .where(eq(VIDEO_RAW_TABLE.videoId, videoId));
 
     let res = NextResponse.json(result);
-    return addCorsHeaders(res); // Add CORS headers
+    return addCorsHeaders(res); 
   } catch (error) {
     console.error('Error during video data retrieval:', error);
     let res = NextResponse.json({ error: 'An error occurred while fetching video data' }, { status: 500 });
-    return addCorsHeaders(res); // Add CORS headers
+    return addCorsHeaders(res);
   }
 }
 
 // Handle OPTIONS requests (for CORS preflight)
 export async function OPTIONS() {
   let res = NextResponse.json({}, { status: 200 });
-  return addCorsHeaders(res); // Add CORS headers
+  return addCorsHeaders(res);
 }

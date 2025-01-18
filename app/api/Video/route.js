@@ -64,12 +64,10 @@ export async function DELETE(req) {
         return setCORSHeaders(response);
     }
 }
-
-// Handle OPTIONS preflight request for CORS
 export async function OPTIONS() {
     const res = new Response(null, {
         headers: {
-            'Access-Control-Allow-Origin': '*', // Allow all origins
+            'Access-Control-Allow-Origin': '*', 
             'Access-Control-Allow-Methods': 'GET, DELETE, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type',
         }

@@ -2,22 +2,15 @@ import { NextResponse } from "next/server";
 import { db } from "@/configs/db";
 import { USER_TABLE } from "@/configs/schema";
 import { eq } from "drizzle-orm";
-
-// Handle CORS directly in the response
 export async function POST(req) {
   try {
-    // Parse the request body
     const { user } = await req.json();
-
-    // Validate if user data exists
     if (!user || !user?.primaryEmailAddress?.emailAddress) {
       return NextResponse.json({
         success: false,
         message: "User information is incomplete.",
       }, { status: 400 });
     }
-
-    // Check if the user already exists in the database
     const data = await db.select().from(USER_TABLE).where(eq(USER_TABLE.email, user?.primaryEmailAddress?.emailAddress));
 
     if (data.length > 0) {
@@ -28,14 +21,12 @@ export async function POST(req) {
       }, {
         status: 200,
         headers: {
-          'Access-Control-Allow-Origin': '*',  // Allow all origins
-          'Access-Control-Allow-Methods': 'POST, OPTIONS',  // Allow necessary methods
-          'Access-Control-Allow-Headers': 'Content-Type',  // Allow necessary headers
+          'Access-Control-Allow-Origin': '*',  
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',  
+          'Access-Control-Allow-Headers': 'Content-Type', 
         }
       });
     }
-
-    // If the user doesn't exist, insert the user data into the database
     const result = await db.insert(USER_TABLE).values({
       name: user.fullName,
       email: user?.primaryEmailAddress?.emailAddress,
@@ -48,7 +39,7 @@ export async function POST(req) {
     }, {
       status: 201,
       headers: {
-        'Access-Control-Allow-Origin': '*',  // Allow all origins
+        'Access-Control-Allow-Origin': '*', 
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
       }
@@ -63,20 +54,18 @@ export async function POST(req) {
     }, {
       status: 500,
       headers: {
-        'Access-Control-Allow-Origin': '*',  // Allow all origins
+        'Access-Control-Allow-Origin': '*', 
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
       }
     });
   }
 }
-
-// Handle CORS preflight requests (OPTIONS)
 export async function OPTIONS(req) {
   return NextResponse.json({}, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': '*',  // Allow all origins
+      'Access-Control-Allow-Origin': '*', 
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     }

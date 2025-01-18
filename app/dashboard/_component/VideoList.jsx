@@ -21,8 +21,6 @@ const VideoList = ({ videolist }) => {
         const result = await response.json();
         if (response.ok) {
             console.log("Video deleted successfully");
-            // Optionally refresh the list here if needed
-            // e.g., call a function to refetch the video list
         } else {
             console.error(result.error || "Failed to delete video");
         }

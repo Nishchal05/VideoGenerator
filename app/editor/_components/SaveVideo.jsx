@@ -20,7 +20,7 @@ const SaveVideo = () => {
           'Content-Type': 'application/json',
         },
       });
-
+      
       if (result.ok) {
         toast.success('Video Saved');
       } else {
@@ -39,6 +39,7 @@ const SaveVideo = () => {
       const result = await fetch('/api/addVideoData?videoId=' + videoId);
       const data = await result.json(); 
       setvideoplaydetail(data[0]?.videoData); 
+      console.log(data)
     } catch (error) {
       console.log('Error fetching video data:', error);
     }

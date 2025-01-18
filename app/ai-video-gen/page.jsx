@@ -23,7 +23,7 @@ const router=useRouter();
         const videoId = uuid4();
         
 
-        const response = await fetch('video-generator-1a49am6v6-nishchal-sundans-projects.vercel.app/api/addVideoData', {
+        const response = await fetch('http://video-generator-1a49am6v6-nishchal-sundans-projects.vercel.app/api/addVideoData', {
             method: 'POST',
             body: JSON.stringify({
                 videoId: videoId,

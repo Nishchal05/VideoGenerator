@@ -1,45 +1,41 @@
-import Cors from 'cors';
 import { inngest } from "@/inngest/client";
 import { NextResponse } from "next/server";
 
-// Initialize the CORS middleware
-const cors = Cors({
-  methods: ['POST', 'OPTIONS'],  // Specify allowed methods
-  origin: `${process.env.NEXT_PUBLIC_API_URL}`,  // Replace with your frontend domain
-  credentials: true,
-});
-
-// Helper function to run CORS middleware
-function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
+// Helper function to add CORS headers
+function addCorsHeaders(response) {
+  response.headers.set("Access-Control-Allow-Origin", process.env.NEXT_PUBLIC_API_URL); // Replace with your frontend domain
+  response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+  response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+  response.headers.set("Access-Control-Allow-Credentials", "true");
+  return response;
 }
 
 // POST handler with CORS
-export async function POST(req, res) {
-  // Add CORS support
-  await runMiddleware(req, res, cors);
+export async function POST(req) {
+  try {
+    const { prompt, videoId } = await req.json();
+    
+    // Send event using inngest
+    await inngest.send({
+      name: "ai/generate-video-data",
+      data: {
+        prompt: prompt,
+        videoId: videoId,
+      },
+    });
 
-  const { prompt, videoId } = await req.json();
-  await inngest.send({
-    name: "ai/generate-video-data",
-    data: {
-      prompt: prompt,
-      videoId: videoId
-    }
-  });
+    let res = NextResponse.json({ result: 'Event Sent!' });
+    return addCorsHeaders(res); // Add CORS headers to the response
 
-  return NextResponse.json({ result: 'Event Sent!' });
+  } catch (error) {
+    console.error("Error during POST request:", error);
+    let res = NextResponse.json({ error: 'An error occurred while sending event' }, { status: 500 });
+    return addCorsHeaders(res); // Add CORS headers to error response
+  }
 }
 
-// Handle OPTIONS requests for preflight CORS
-export async function OPTIONS(req, res) {
-  await runMiddleware(req, res, cors);
-  return NextResponse.json({}, { status: 200 });
+// Handle OPTIONS requests (for CORS preflight)
+export async function OPTIONS() {
+  let res = NextResponse.json({}, { status: 200 });
+  return addCorsHeaders(res); // Add CORS headers to OPTIONS response
 }

@@ -1,32 +1,18 @@
-import Cors from 'cors';
 import { db } from "@/configs/db";
 import { VIDEO_RAW_TABLE } from "@/configs/schema";
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm"; 
 
-// Initialize the CORS middleware
-const cors = Cors({
-  methods: ['GET', 'POST', 'PUT', 'OPTIONS'],
-  origin: `${process.env.NEXT_PUBLIC_API_URL}`,  // Replace with your frontend domain
-  credentials: true,
-});
-
-// Helper function to run CORS middleware
-function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
+// Helper function to add CORS headers
+function addCorsHeaders(response) {
+  response.headers.set("Access-Control-Allow-Origin", process.env.NEXT_PUBLIC_API_URL);
+  response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
+  response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+  return response;
 }
 
-// POST handler with CORS
-export async function POST(req, res) {
-  await runMiddleware(req, res, cors);  // Add CORS support
-
+// POST handler
+export async function POST(req) {
   try {
     const { videoId, useremail } = await req.json();
 
@@ -35,17 +21,17 @@ export async function POST(req, res) {
       createdBy: useremail,
     }).returning(VIDEO_RAW_TABLE); 
 
-    return NextResponse.json({ response: response });
+    let res = NextResponse.json({ response: response });
+    return addCorsHeaders(res); // Add CORS headers
   } catch (error) {
     console.error('Error during video data insertion:', error);
-    return NextResponse.json({ error: 'An error occurred on the server' }, { status: 500 });
+    let res = NextResponse.json({ error: 'An error occurred on the server' }, { status: 500 });
+    return addCorsHeaders(res); // Add CORS headers
   }
 }
 
-// PUT handler with CORS
-export async function PUT(req, res) {
-  await runMiddleware(req, res, cors);  // Add CORS support
-
+// PUT handler
+export async function PUT(req) {
   try {
     const { videoId, videoData } = await req.json();
 
@@ -54,17 +40,17 @@ export async function PUT(req, res) {
       .where(eq(VIDEO_RAW_TABLE.videoId, videoId))
       .returning(VIDEO_RAW_TABLE);
 
-    return NextResponse.json({ response: response });
+    let res = NextResponse.json({ response: response });
+    return addCorsHeaders(res); // Add CORS headers
   } catch (error) {
     console.error('Error during video data update:', error);
-    return NextResponse.json({ error: 'An error occurred while updating video data' }, { status: 500 });
+    let res = NextResponse.json({ error: 'An error occurred while updating video data' }, { status: 500 });
+    return addCorsHeaders(res); // Add CORS headers
   }
 }
 
-// GET handler with CORS
-export async function GET(req, res) {
-  await runMiddleware(req, res, cors);  // Add CORS support
-
+// GET handler
+export async function GET(req) {
   try {
     const url = new URL(req.url);
     const videoId = url.searchParams.get("videoId");
@@ -74,15 +60,17 @@ export async function GET(req, res) {
       .from(VIDEO_RAW_TABLE)
       .where(eq(VIDEO_RAW_TABLE.videoId, videoId));
 
-    return NextResponse.json(result);
+    let res = NextResponse.json(result);
+    return addCorsHeaders(res); // Add CORS headers
   } catch (error) {
     console.error('Error during video data retrieval:', error);
-    return NextResponse.json({ error: 'An error occurred while fetching video data' }, { status: 500 });
+    let res = NextResponse.json({ error: 'An error occurred while fetching video data' }, { status: 500 });
+    return addCorsHeaders(res); // Add CORS headers
   }
 }
 
-// Handle OPTIONS requests for preflight CORS
-export async function OPTIONS(req, res) {
-  await runMiddleware(req, res, cors);
-  return NextResponse.json({}, { status: 200 });
+// Handle OPTIONS requests (for CORS preflight)
+export async function OPTIONS() {
+  let res = NextResponse.json({}, { status: 200 });
+  return addCorsHeaders(res); // Add CORS headers
 }

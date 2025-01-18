@@ -1,39 +1,38 @@
 import { serve } from "inngest/next";
 import { inngest } from "../../../inngest/client";
 import { GenerateAIVideoData } from "@/inngest/function";
-import Cors from 'cors';
+import { NextResponse } from "next/server";
 
-// Initialize the CORS middleware
-const cors = Cors({
-  methods: ['GET', 'POST', 'PUT', 'OPTIONS'],  // Allowed methods
-  origin: `${process.env.NEXT_PUBLIC_API_URL}`,  // Allowed origin
-  credentials: true,  // Allow credentials (cookies, authorization headers, etc.)
-});
-
-// Helper function to run middleware
-function runMiddleware(req, res, fn) {
-  return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
-      if (result instanceof Error) {
-        return reject(result);
-      }
-      return resolve(result);
-    });
-  });
+// Helper function to add CORS headers
+function addCorsHeaders(response) {
+  response.headers.set("Access-Control-Allow-Origin", process.env.NEXT_PUBLIC_API_URL);  // Replace with your frontend domain
+  response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
+  response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  response.headers.set("Access-Control-Allow-Credentials", "true");
+  return response;
 }
 
-// Wrapper to serve with CORS handling
-async function handleRequest(req, res) {
-  // Run the CORS middleware
-  await runMiddleware(req, res, cors);
-  
-  // Serve Inngest functions after CORS is handled
-  return serve({
+// Wrapper function to handle CORS and Inngest requests
+async function handleRequest(req) {
+  const method = req.method;
+
+  // Handle OPTIONS request for preflight CORS
+  if (method === "OPTIONS") {
+    const res = NextResponse.json({}, { status: 200 });
+    return addCorsHeaders(res);
+  }
+
+  // Handle GET, POST, PUT methods with Inngest
+  const inngestHandler = serve({
     client: inngest,
     functions: [GenerateAIVideoData],
-  })(req, res);
+  });
+
+  const res = await inngestHandler(req);
+  return addCorsHeaders(res);  // Add CORS headers to the response
 }
 
 export const GET = handleRequest;
 export const POST = handleRequest;
 export const PUT = handleRequest;
+export const OPTIONS = handleRequest;

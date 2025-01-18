@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 // Helper function to set CORS headers
 function setCORSHeaders(response) {
-    response.headers.set('Access-Control-Allow-Origin', 'https://video-generator-dusky.vercel.app');
+    response.headers.set('Access-Control-Allow-Origin', `${process.env.NEXT_PUBLIC_API_URL}`);
     response.headers.set('Access-Control-Allow-Methods', 'GET, DELETE, OPTIONS');
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
     return response;
@@ -66,7 +66,7 @@ export async function DELETE(req) {
 export async function OPTIONS() {
     return new Response(null, {
         headers: {
-            'Access-Control-Allow-Origin': 'https://video-generator-dusky.vercel.app',
+            'Access-Control-Allow-Origin': `${process.env.NEXT_PUBLIC_API_URL}`,
             'Access-Control-Allow-Methods': 'GET, DELETE, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type',
         }

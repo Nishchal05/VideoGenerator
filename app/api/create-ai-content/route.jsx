@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 // Initialize the CORS middleware
 const cors = Cors({
   methods: ['POST', 'OPTIONS'],  // Specify allowed methods
-  origin: 'https://video-generator-dusky.vercel.app',  // Replace with your frontend domain
+  origin: `${process.env.NEXT_PUBLIC_API_URL}`,  // Replace with your frontend domain
   credentials: true,
 });
 

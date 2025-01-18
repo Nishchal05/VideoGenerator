@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 // Initialize the CORS middleware
 const cors = Cors({
   methods: ['GET', 'POST', 'PUT', 'OPTIONS'],
-  origin: 'https://video-generator-dusky.vercel.app',  // Replace with your frontend domain
+  origin: `${process.env.NEXT_PUBLIC_API_URL}`,  // Replace with your frontend domain
   credentials: true,
 });
 

@@ -5,7 +5,7 @@ import { USER_TABLE } from "@/configs/schema";
 import { eq } from "drizzle-orm";
 const cors = Cors({
   methods: ['POST', 'OPTIONS'],
-  origin: 'https://video-generator-dusky.vercel.app',
+  origin: `${process.env.NEXT_PUBLIC_API_URL}`,
   credentials: true,
 });
 function runMiddleware(req, res, fn) {

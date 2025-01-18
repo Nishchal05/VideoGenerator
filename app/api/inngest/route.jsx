@@ -6,7 +6,7 @@ import Cors from 'cors';
 // Initialize the CORS middleware
 const cors = Cors({
   methods: ['GET', 'POST', 'PUT', 'OPTIONS'],  // Allowed methods
-  origin: 'https://video-generator-dusky.vercel.app',  // Allowed origin
+  origin: `${process.env.NEXT_PUBLIC_API_URL}`,  // Allowed origin
   credentials: true,  // Allow credentials (cookies, authorization headers, etc.)
 });
 

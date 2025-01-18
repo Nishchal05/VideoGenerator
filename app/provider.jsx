@@ -13,7 +13,7 @@ const Provider = ({ children }) => {
   const userinfo = async () => {
     try {
       if (user) {
-        const response = await fetch("http://localhost:3000/api/add-data", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/add-data`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

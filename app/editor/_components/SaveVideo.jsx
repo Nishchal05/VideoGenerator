@@ -10,7 +10,7 @@ const SaveVideo = () => {
   const { videoplaydetail,setvideoplaydetail } = useContext(Videodetail);
   const saveVideo = async () => {
     try {
-      const result = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/addVideoData`, {
+      const result = await fetch('/api/addVideoData', {
         method: 'PUT',
         body: JSON.stringify({
           videoId: videoId,
@@ -36,7 +36,7 @@ const SaveVideo = () => {
   };
   const GetVideoData = async () => {
     try {
-      const result = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/addVideoData?videoId=` + videoId);
+      const result = await fetch('/api/addVideoData?videoId=' + videoId);
       const data = await result.json(); 
       setvideoplaydetail(data[0]?.videoData); 
     } catch (error) {

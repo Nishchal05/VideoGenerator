@@ -12,7 +12,7 @@ const Dashboard = () => {
   const handleUserVideo = async () => {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/Video?email=${user?.primaryEmailAddress?.emailAddress}`
+        `/api/Video?email=${user?.primaryEmailAddress?.emailAddress}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch videos");

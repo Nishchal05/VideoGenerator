@@ -15,7 +15,7 @@ const Videoplayer = () => {
     const videoId = uuid4();
     setLoading(true); 
     try {
-      const result = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/addVideoData`, {
+      const result = await fetch('/api/addVideoData', {
         method: 'POST',
         body: JSON.stringify({
           videoId: videoId,

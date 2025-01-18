@@ -9,7 +9,7 @@ const VideoList = ({ videolist }) => {
 
   const handleDeletion = async (videoId) => { 
     try {
-        const response = await fetch('http://video-generator-7b648vogc-nishchal-sundans-projects.vercel.app/api/Video', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Video`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json", 

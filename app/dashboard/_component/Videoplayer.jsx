@@ -15,7 +15,7 @@ const Videoplayer = () => {
     const videoId = uuid4();
     setLoading(true); 
     try {
-      const result = await fetch('http://video-generator-7b648vogc-nishchal-sundans-projects.vercel.app/api/addVideoData', {
+      const result = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/addVideoData`, {
         method: 'POST',
         body: JSON.stringify({
           videoId: videoId,

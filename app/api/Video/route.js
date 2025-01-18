@@ -2,10 +2,8 @@ import { db } from "@/configs/db";
 import { VIDEO_RAW_TABLE } from "@/configs/schema";
 import { desc, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
-
-// Helper function to set CORS headers allowing all origins
 function setCORSHeaders(response) {
-    response.headers.set('Access-Control-Allow-Origin', '*'); // Allow all origins
+    response.headers.set('Access-Control-Allow-Origin', '*'); 
     response.headers.set('Access-Control-Allow-Methods', 'GET, DELETE, OPTIONS');
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
     return response;

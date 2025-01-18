@@ -54,7 +54,7 @@ const TrackList = () => {
   return (
     <div className="p-3 bg-gray-300 rounded-lg flex flex-col gap-3">
       <h2 className="text-center font-bold">Track List</h2>
-      <div className="h-[70vh] overflow-auto scrollbar-hide">
+      <div className=" h-fit  md:h-[70vh] overflow-auto scrollbar-hide">
         {frameList && frameList.length > 0 ? (
           frameList.map((val, index) => (
             <div

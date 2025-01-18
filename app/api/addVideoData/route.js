@@ -1,11 +1,11 @@
 import { db } from "@/configs/db";
 import { VIDEO_RAW_TABLE } from "@/configs/schema";
 import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm"; 
+import { eq } from "drizzle-orm";
 
 // Helper function to add CORS headers
 function addCorsHeaders(response) {
-  response.headers.set("Access-Control-Allow-Origin", process.env.NEXT_PUBLIC_API_URL);
+  response.headers.set("Access-Control-Allow-Origin", "*");  // Allow all origins
   response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
   response.headers.set("Access-Control-Allow-Headers", "Content-Type");
   return response;

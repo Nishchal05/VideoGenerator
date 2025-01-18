@@ -3,9 +3,9 @@ import { VIDEO_RAW_TABLE } from "@/configs/schema";
 import { desc, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-// Helper function to set CORS headers
+// Helper function to set CORS headers allowing all origins
 function setCORSHeaders(response) {
-    response.headers.set('Access-Control-Allow-Origin', `${process.env.NEXT_PUBLIC_API_URL}`);
+    response.headers.set('Access-Control-Allow-Origin', '*'); // Allow all origins
     response.headers.set('Access-Control-Allow-Methods', 'GET, DELETE, OPTIONS');
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
     return response;
@@ -17,7 +17,7 @@ export async function GET(req) {
         const email = url.searchParams.get("email");
 
         if (!email) {
-            let response = NextResponse.json({ error: "Email is required" }, { status: 400 });
+            const response = NextResponse.json({ error: "Email is required" }, { status: 400 });
             return setCORSHeaders(response);
         }
 
@@ -26,11 +26,16 @@ export async function GET(req) {
             .where(eq(VIDEO_RAW_TABLE.createdBy, email))
             .orderBy(desc(VIDEO_RAW_TABLE.id));
 
-        let response = NextResponse.json({ data: result }, { status: 200 });
+        if (result.length === 0) {
+            const response = NextResponse.json({ error: "No videos found for the given email" }, { status: 404 });
+            return setCORSHeaders(response);
+        }
+
+        const response = NextResponse.json({ data: result }, { status: 200 });
         return setCORSHeaders(response);
     } catch (error) {
-        console.error(error);
-        let response = NextResponse.json({ error: "Server error" }, { status: 500 });
+        console.error('Error during GET request:', error);
+        const response = NextResponse.json({ error: "Server error" }, { status: 500 });
         return setCORSHeaders(response);
     }
 }
@@ -40,7 +45,7 @@ export async function DELETE(req) {
         const { videoId } = await req.json();
 
         if (!videoId) {
-            let response = NextResponse.json({ error: "videoId is required" }, { status: 400 });
+            const response = NextResponse.json({ error: "videoId is required" }, { status: 400 });
             return setCORSHeaders(response);
         }
 
@@ -49,26 +54,27 @@ export async function DELETE(req) {
             .where(eq(VIDEO_RAW_TABLE.videoId, videoId));
 
         if (result.rowCount === 0) {
-            let response = NextResponse.json({ error: "Video not found" }, { status: 404 });
+            const response = NextResponse.json({ error: "Video not found" }, { status: 404 });
             return setCORSHeaders(response);
         }
 
-        let response = NextResponse.json({ message: "Video deleted successfully" }, { status: 200 });
+        const response = NextResponse.json({ message: "Video deleted successfully" }, { status: 200 });
         return setCORSHeaders(response);
     } catch (error) {
-        console.error(error);
-        let response = NextResponse.json({ error: "Server error" }, { status: 500 });
+        console.error('Error during DELETE request:', error);
+        const response = NextResponse.json({ error: "Server error" }, { status: 500 });
         return setCORSHeaders(response);
     }
 }
 
 // Handle OPTIONS preflight request for CORS
 export async function OPTIONS() {
-    return new Response(null, {
+    const res = new Response(null, {
         headers: {
-            'Access-Control-Allow-Origin': `${process.env.NEXT_PUBLIC_API_URL}`,
+            'Access-Control-Allow-Origin': '*', // Allow all origins
             'Access-Control-Allow-Methods': 'GET, DELETE, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type',
         }
     });
+    return setCORSHeaders(res);
 }

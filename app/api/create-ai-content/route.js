@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 
 // Helper function to add CORS headers
 function addCorsHeaders(response) {
-  response.headers.set("Access-Control-Allow-Origin", process.env.NEXT_PUBLIC_API_URL); // Replace with your frontend domain
+  // Allow all origins by default for development or use your frontend domain in production
+  response.headers.set("Access-Control-Allow-Origin", "*"); // Replace with process.env.NEXT_PUBLIC_API_URL if you prefer specific origin
   response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
   response.headers.set("Access-Control-Allow-Headers", "Content-Type");
   response.headers.set("Access-Control-Allow-Credentials", "true");

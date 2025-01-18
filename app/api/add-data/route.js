@@ -14,7 +14,7 @@ export async function POST(req) {
       return NextResponse.json({
         success: false,
         message: "User information is incomplete.",
-      }, { status: 400 }); 
+      }, { status: 400 });
     }
 
     // Check if the user already exists in the database
@@ -25,10 +25,10 @@ export async function POST(req) {
         success: true,
         message: "User already exists.",
         data: data,
-      }, { 
+      }, {
         status: 200,
         headers: {
-          'Access-Control-Allow-Origin': process.env.NEXT_PUBLIC_API_URL,  // Allow the specific origin
+          'Access-Control-Allow-Origin': '*',  // Allow all origins
           'Access-Control-Allow-Methods': 'POST, OPTIONS',  // Allow necessary methods
           'Access-Control-Allow-Headers': 'Content-Type',  // Allow necessary headers
         }
@@ -45,10 +45,10 @@ export async function POST(req) {
       success: true,
       message: "User added successfully.",
       data: result,
-    }, { 
+    }, {
       status: 201,
       headers: {
-        'Access-Control-Allow-Origin': process.env.NEXT_PUBLIC_API_URL,
+        'Access-Control-Allow-Origin': '*',  // Allow all origins
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
       }
@@ -60,10 +60,10 @@ export async function POST(req) {
       success: false,
       message: "An error occurred while processing the request.",
       error: error.toString(),
-    }, { 
+    }, {
       status: 500,
       headers: {
-        'Access-Control-Allow-Origin': process.env.NEXT_PUBLIC_API_URL,
+        'Access-Control-Allow-Origin': '*',  // Allow all origins
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
       }
@@ -73,10 +73,10 @@ export async function POST(req) {
 
 // Handle CORS preflight requests (OPTIONS)
 export async function OPTIONS(req) {
-  return NextResponse.json({}, { 
+  return NextResponse.json({}, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': process.env.NEXT_PUBLIC_API_URL,
+      'Access-Control-Allow-Origin': '*',  // Allow all origins
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     }

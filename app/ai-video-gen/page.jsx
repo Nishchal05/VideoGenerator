@@ -23,7 +23,7 @@ const router=useRouter();
         const videoId = uuid4();
         
 
-        const response = await fetch('http://localhost:3000/api/addVideoData', {
+        const response = await fetch('video-generator-1a49am6v6-nishchal-sundans-projects.vercel.app/api/addVideoData', {
             method: 'POST',
             body: JSON.stringify({
                 videoId: videoId,
@@ -39,7 +39,7 @@ const router=useRouter();
 
         const sampleData = Prompt.replace('{userTopic}', Topic).replace('{userDuration}', duration);
 
-        const aiResult = await fetch('http://localhost:3000/api/create-ai-content', {
+        const aiResult = await fetch('http://video-generator-1a49am6v6-nishchal-sundans-projects.vercel.app/api/create-ai-content', {
             method: 'POST',
             body: JSON.stringify({
                 videoId: videoId,

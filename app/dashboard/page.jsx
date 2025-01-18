@@ -12,7 +12,7 @@ const Dashboard = () => {
   const handleUserVideo = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/Video?email=${user?.primaryEmailAddress?.emailAddress}`
+        `http://video-generator-7b648vogc-nishchal-sundans-projects.vercel.app/api/Video?email=${user?.primaryEmailAddress?.emailAddress}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch videos");

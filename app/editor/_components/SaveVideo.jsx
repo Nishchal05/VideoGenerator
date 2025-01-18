@@ -10,7 +10,7 @@ const SaveVideo = () => {
   const { videoplaydetail,setvideoplaydetail } = useContext(Videodetail);
   const saveVideo = async () => {
     try {
-      const result = await fetch('http://localhost:3000/api/addVideoData', {
+      const result = await fetch('http://video-generator-7b648vogc-nishchal-sundans-projects.vercel.app/api/addVideoData', {
         method: 'PUT',
         body: JSON.stringify({
           videoId: videoId,

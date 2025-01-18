@@ -1,8 +1,32 @@
+import Cors from 'cors';
 import { db } from "@/configs/db";
 import { VIDEO_RAW_TABLE } from "@/configs/schema";
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm"; 
-export async function POST(req) {
+
+// Initialize the CORS middleware
+const cors = Cors({
+  methods: ['GET', 'POST', 'PUT', 'OPTIONS'],
+  origin: 'https://video-generator-dusky.vercel.app',  // Replace with your frontend domain
+  credentials: true,
+});
+
+// Helper function to run CORS middleware
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+}
+
+// POST handler with CORS
+export async function POST(req, res) {
+  await runMiddleware(req, res, cors);  // Add CORS support
+
   try {
     const { videoId, useremail } = await req.json();
 
@@ -10,7 +34,7 @@ export async function POST(req) {
       videoId: videoId,
       createdBy: useremail,
     }).returning(VIDEO_RAW_TABLE); 
-    
+
     return NextResponse.json({ response: response });
   } catch (error) {
     console.error('Error during video data insertion:', error);
@@ -18,7 +42,10 @@ export async function POST(req) {
   }
 }
 
-export async function PUT(req) {
+// PUT handler with CORS
+export async function PUT(req, res) {
+  await runMiddleware(req, res, cors);  // Add CORS support
+
   try {
     const { videoId, videoData } = await req.json();
 
@@ -33,17 +60,29 @@ export async function PUT(req) {
     return NextResponse.json({ error: 'An error occurred while updating video data' }, { status: 500 });
   }
 }
-export async function GET(req) {
-    try{
-        const url = new URL(req.url);
+
+// GET handler with CORS
+export async function GET(req, res) {
+  await runMiddleware(req, res, cors);  // Add CORS support
+
+  try {
+    const url = new URL(req.url);
     const videoId = url.searchParams.get("videoId");
+
     const result = await db
-    .select()
-    .from(VIDEO_RAW_TABLE)
-    .where(eq(VIDEO_RAW_TABLE.videoId, videoId));
+      .select()
+      .from(VIDEO_RAW_TABLE)
+      .where(eq(VIDEO_RAW_TABLE.videoId, videoId));
+
     return NextResponse.json(result);
-    }catch(error){
-        console.log(error);
-    }
-    
+  } catch (error) {
+    console.error('Error during video data retrieval:', error);
+    return NextResponse.json({ error: 'An error occurred while fetching video data' }, { status: 500 });
+  }
+}
+
+// Handle OPTIONS requests for preflight CORS
+export async function OPTIONS(req, res) {
+  await runMiddleware(req, res, cors);
+  return NextResponse.json({}, { status: 200 });
 }

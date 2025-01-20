@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import Header from '../../dashboard/_component/header'
 import { Button } from '@/components/ui/button'

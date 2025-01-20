@@ -5,6 +5,7 @@ import TrackList from '../_components/TrackList'
 import VideoPlayer from '../_components/VideoPlayer'
 import ControlSection from '../_components/ControlSection'
 import SaveVideo from '../_components/SaveVideo'
+import { toast } from 'sonner'
 
 const Editor = () => {
   return (
@@ -15,7 +16,7 @@ const Editor = () => {
           <h2 className='font-bold text-xl md:text-2xl'>Edit Video</h2>
           <div className='flex gap-2 justify-center'>
             <SaveVideo />
-            <Button>Export</Button>
+            <Button onClick={()=>{toast.error('Sorry Export is out off service')}}>Export</Button>
           </div>
         </div>
         

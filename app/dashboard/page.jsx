@@ -9,26 +9,29 @@ const Dashboard = () => {
   const [videolist, setvideolist] = useState([]);
   const { user } = useUser();
 
-  const handleUserVideo = async () => {
-    try {
-      const response = await fetch(
-        `/api/Video?email=${user?.primaryEmailAddress?.emailAddress}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch videos");
-      }
-      const result = await response.json();
-      setvideolist(result.data || []); 
-    } catch (error) {
-      console.error("Error fetching videos:", error);
+const handleUserVideo = async () => {
+  try {
+    const response = await fetch(
+      `/api/Video?email=${user?.primaryEmailAddress?.emailAddress}`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch videos");
     }
-  };
+    const result = await response.json();
+    setvideolist(result.data || []); 
+  } catch (error) {
+    console.error("Error fetching videos:", error);
+  }
+};
 
-  useEffect(() => {
-    if (user) {
-      handleUserVideo();
-    }
-  }, [user]);
+// Call this function again after creating or updating a video status
+useEffect(() => {
+  if (user) {
+    handleUserVideo(); // Fetch video list when the user changes or on initial load
+  }
+}, [user]);
+
+
 
   return (
     <div className="p-10">

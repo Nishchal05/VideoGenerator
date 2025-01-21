@@ -4,31 +4,30 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const VideoList = ({ videolist }) => {
-  const [loading, setLoading] = useState(null); 
+  const [loading, setLoading] = useState(null); // State for video navigation loading
   const router = useRouter();
 
-  const handleDeletion = async (videoId) => { 
+  const handleDeletion = async (videoId) => {
     try {
-        const response = await fetch('/api/Video', {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json", 
-            },
-            body: JSON.stringify({
-                videoId: videoId,
-            }),
-        });
-        const result = await response.json();
-        if (response.ok) {
-            console.log("Video deleted successfully");
-        } else {
-            console.error(result.error || "Failed to delete video");
-        }
+      const response = await fetch('/api/Video', {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json", 
+        },
+        body: JSON.stringify({
+          videoId: videoId,
+        }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        console.log("Video deleted successfully");
+      } else {
+        console.error(result.error || "Failed to delete video");
+      }
     } catch (error) {
-        console.error("Deletion error:", error);
+      console.error("Deletion error:", error);
     }
-};
-
+  };
 
   const handleNavigation = async (videoId) => {
     setLoading(videoId); 
@@ -50,7 +49,6 @@ const VideoList = ({ videolist }) => {
                   background: frame?.bgColor ?? "#000",
                 }}
               >
-                {console.log(video.status)}
                 {loading === video?.videoId ? (
                   <Loader2 className="animate-spin" />
                 ) : video?.status === "active" ? (
@@ -72,7 +70,7 @@ const VideoList = ({ videolist }) => {
                   <Edit2Icon className="z-20 text-white h-6 w-6" />
                 </div>
               </div>
-              
+
               {video.status === "active" ? (
                 <div className="flex gap-5 mt-2 items-center justify-end">
                   <Edit2Icon

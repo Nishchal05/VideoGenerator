@@ -50,6 +50,7 @@ const VideoList = ({ videolist }) => {
                   background: frame?.bgColor ?? "#000",
                 }}
               >
+                {console.log(video)}
                 {loading === video?.videoId ? (
                   <Loader2 className="animate-spin" />
                 ) : video?.status === "active" ? (

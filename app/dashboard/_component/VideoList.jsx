@@ -49,9 +49,7 @@ const VideoList = ({ videolist }) => {
                   background: frame?.bgColor ?? "#000",
                 }}
               >
-                {loading === video?.videoId ? (
-                  <Loader2 className="animate-spin" />
-                ) : video?.status === "active" ? (
+                {video?.status === "active" ? (
                   <h2
                     style={{
                       color: frame?.textColor ?? "#fff",
@@ -60,7 +58,7 @@ const VideoList = ({ videolist }) => {
                     {frame?.text ?? "Hello World!"}
                   </h2>
                 ) : (
-                  <h2>
+                  <h2 className=" flex">
                     <Loader2 className="animate-spin" />
                     Generating...
                   </h2>

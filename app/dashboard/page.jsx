@@ -24,24 +24,16 @@ const handleUserVideo = async () => {
   }
 };
 
-const checkVideoStatus = async (videoId) => {
-  try {
-    const response = await fetch(`/api/Video/${videoId}`);
-    const result = await response.json();
-    if (result.status === "active") {
-      handleUserVideo();
-    }
-  } catch (error) {
-    console.error("Error checking video status:", error);
-  }
-};
-
-
 useEffect(() => {
   if (user) {
     handleUserVideo(); 
+    const interval = setInterval(() => {
+      handleUserVideo();
+    }, 5000);
+    return () => clearInterval(interval); 
   }
 }, [user]);
+
 
 
   return (

@@ -24,13 +24,24 @@ const handleUserVideo = async () => {
   }
 };
 
-// Call this function again after creating or updating a video status
+const checkVideoStatus = async (videoId) => {
+  try {
+    const response = await fetch(`/api/Video/${videoId}`);
+    const result = await response.json();
+    if (result.status === "active") {
+      handleUserVideo();
+    }
+  } catch (error) {
+    console.error("Error checking video status:", error);
+  }
+};
+
+
 useEffect(() => {
   if (user) {
-    handleUserVideo(); // Fetch video list when the user changes or on initial load
+    handleUserVideo(); 
   }
 }, [user]);
-
 
 
   return (

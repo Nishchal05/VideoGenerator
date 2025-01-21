@@ -27,11 +27,6 @@ const handleUserVideo = async () => {
 useEffect(() => {
   if (user) {
     handleUserVideo(); 
-    const interval = setInterval(() => {
-      handleUserVideo();
-    }, 5000);
-    return () => clearInterval(interval); 
-  }
 }, [user]);
 
 

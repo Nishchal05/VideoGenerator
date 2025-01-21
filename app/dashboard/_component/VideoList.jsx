@@ -52,7 +52,7 @@ const VideoList = ({ videolist }) => {
               >
                 {loading === video?.videoId ? (
                   <Loader2 className="animate-spin" />
-                ) : video.status === "active" ? (
+                ) : video?.status === "active" ? (
                   <h2
                     style={{
                       color: frame?.textColor ?? "#fff",

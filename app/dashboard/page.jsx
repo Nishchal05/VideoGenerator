@@ -27,6 +27,7 @@ const handleUserVideo = async () => {
 useEffect(() => {
   if (user) {
     handleUserVideo(); 
+  }
 }, [user]);
 
 

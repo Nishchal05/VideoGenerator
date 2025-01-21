@@ -26,10 +26,13 @@ const handleUserVideo = async () => {
 
 useEffect(() => {
   if (user) {
-    handleUserVideo(); 
+    handleUserVideo(); // Fetch videos on component mount
+    const interval = setInterval(() => {
+      handleUserVideo(); // Re-fetch every 5 seconds
+    }, 5000); // Polling every 5 seconds
+    return () => clearInterval(interval); // Cleanup interval on component unmount
   }
 }, [user]);
-
 
   return (
     <div className="p-10">
